@@ -48,14 +48,24 @@ def filter_and_save_ulty_data(input_filename, output_filename):
         print("Error: The CSV file format is unexpected. Ensure it has at least two columns.")
 
 # --- How to use this script ---
+
 # Dynamically generate the filename with today's date.
 today_date = datetime.date.today().strftime("%Y-%m-%d")
 input_file = f"intraday-{today_date}.csv"
-output_file = f"ULTY_intraday-{today_date}.csv"
 
-# Check if the output file already exists before running the filtering process.
-if os.path.exists(output_file):
-    print(f"The output file '{output_file}' already exists. Skipping the process.")
+# Define the filenames for the dated and 'Latest' output files.
+dated_output_file = f"ULTY_intraday-{today_date}.csv"
+latest_output_file = "ULTY_intraday-Latest.csv"
+
+# Check if the dated output file already exists before running the filtering process.
+if os.path.exists(dated_output_file):
+    print(f"The dated output file '{dated_output_file}' already exists. Skipping the filtering process.")
 else:
-    # Call the function to run the filtering and saving process.
-    filter_and_save_ulty_data(input_file, output_file)
+    # Call the function to run the filtering and saving process for the dated file.
+    filter_and_save_ulty_data(input_file, dated_output_file)
+
+# Always run the process for the "Latest" file to ensure it's up-to-date.
+# This will overwrite the file each time the script is run.
+print("\nSaving the latest version...")
+filter_and_save_ulty_data(input_file, latest_output_file)
+
